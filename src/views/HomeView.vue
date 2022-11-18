@@ -18,7 +18,6 @@
             <label for="flight">Flights</label>
           </div>
           <div class="header_div">
-            <!-- button for hotels -->
             <input
               type="radio"
               id="hotel"
@@ -26,6 +25,7 @@
               value="hotel"
               v-model="bookingType"
               @click="setBookingType('hotel')"
+              checked
             />
             <label for="hotel">Hotels</label>
           </div>
@@ -36,7 +36,7 @@
             <div class="flight-from col">
               <label for="flight-from">From</label>
               <input
-                type="text"
+                type="search"
                 id="flight-from"
                 name="flight-from"
                 placeholder="Enter a city or airport"
@@ -46,7 +46,7 @@
             <div class="flight-to col">
               <label for="flight-to">To</label>
               <input
-                type="text"
+                type="search"
                 id="flight-to"
                 name="flight-to"
                 placeholder="Enter a city or airport"
@@ -231,6 +231,9 @@
 </template>
 
 <script>
+// import { MDBRadio, MDBBtnGroup } from "mdb-vue-ui-kit";
+import { ref } from "vue";
+const radio3 = ref("option1");
 export default {
   name: "HomeView",
   data() {
@@ -249,6 +252,13 @@ export default {
       hotelGuests: 1,
       passengers: ["adult", "children", "infant"],
       num_passengers: 1,
+      radio3,
+      book_type: {
+        1: "Flight",
+        2: "Hotel",
+        3: "Trips",
+      },
+      book_id: null,
     };
   },
   methods: {
@@ -375,8 +385,23 @@ input[type="radio"]:checked:after {
   justify-content: center;
   align-items: center;
   margin-right: 50px;
-  background-color: blue;
+  background-color: white;
   width: 200px;
   height: 40px;
+  color: blue;
+}
+.header_div:hover {
+  background-color: blue;
+  color: white;
+  cursor: pointer;
+}
+/* not active */
+.header_div:active {
+  background-color: white;
+  color: blue;
+}
+.header_div:active:hover {
+  background-color: blue;
+  color: white;
 }
 </style>
