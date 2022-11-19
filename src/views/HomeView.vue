@@ -11,17 +11,29 @@
           v-for="tab in tabs"
           :key="tab"
           @click="selected = tab"
-          :class="['tab-btn', { active: selected === tab }]"
+          :class="['tab-btn', { active: tab.includes(selected) }]"
         >
           {{ tab }}
         </v-btn>
       </div>
-      <component :is="selected" class="tab"></component>
+      <!-- display other components with selected -->
+      <div v-if="selected === 'Flight'" class="tab">
+        <FlightTabs />
+      </div>
+      <div v-if="selected === 'Hotel'" class="tab">
+        <HotelTabs />
+      </div>
+      <div v-if="selected === 'Trips'" class="tab">
+        <TripsTabs />
+      </div>
     </v-card>
   </v-card>
 </template>
 
 <script>
+import FlightTabs from "../views/FlightTabs.vue";
+import HotelTabs from "../views/HotelTabs.vue";
+import TripsTabs from "../views/TripsTabs.vue";
 export default {
   data: function () {
     return {
@@ -29,7 +41,11 @@ export default {
       selected: "Trips",
     };
   },
-  components: {},
+  components: {
+    FlightTabs,
+    HotelTabs,
+    TripsTabs,
+  },
 };
 </script>
 
