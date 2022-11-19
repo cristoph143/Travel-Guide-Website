@@ -1,307 +1,40 @@
 <template>
-  <div class="home">
-    <div class="booking">
-      <h>Welcome to the Philippines</h>
-      <p>Book your next trip to the Philippines</p>
-      <div class="boxes">
-        <div class="radios">
-          <div class="header_div">
-            <!-- button for flights -->
-            <input
-              type="radio"
-              id="flight"
-              name="booking"
-              value="flight"
-              v-model="bookingType"
-              @click="setBookingType('flight')"
-            />
-            <label for="flight">Flights</label>
-          </div>
-          <div class="header_div">
-            <input
-              type="radio"
-              id="hotel"
-              name="booking"
-              value="hotel"
-              v-model="bookingType"
-              @click="setBookingType('hotel')"
-              checked
-            />
-            <label for="hotel">Hotels</label>
-          </div>
-        </div>
-        <!-- when setbookingtype is flight then show this div -->
-        <div v-if="bookingType === 'flight'" class="template">
-          <div class="flight">
-            <div class="flight-from col">
-              <label for="flight-from">From</label>
-              <input
-                type="search"
-                id="flight-from"
-                name="flight-from"
-                placeholder="Enter a city or airport"
-                v-model="flightFrom"
-              />
-            </div>
-            <div class="flight-to col">
-              <label for="flight-to">To</label>
-              <input
-                type="search"
-                id="flight-to"
-                name="flight-to"
-                placeholder="Enter a city or airport"
-                v-model="flightTo"
-              />
-            </div>
-            <div class="flight-date col">
-              <label for="flight-date">Departure Date</label>
-              <input
-                type="date"
-                id="flight-date"
-                name="flight-date"
-                v-model="flightDate"
-              />
-            </div>
-            <!-- return date -->
-            <div class="flight-return-date col">
-              <label for="flight-return-date">Return Date</label>
-              <input
-                type="date"
-                id="flight-return-date"
-                name="flight-return-date"
-                v-model="flightReturnDate"
-              />
-            </div>
-            <!-- dropdown for list of passengers with increment decrement value -->
-            <div class="flight-passengers col">
-              <label for="flight-passengers">Passengers</label>
-              <select
-                name="flight-passengers"
-                id="flight-passengers"
-                v-model="flightPassengers"
-              >
-                <!-- default option to be display -->
-                <option value="0" disabled selected>Choose</option>
-                <option
-                  v-for="passenger in passengers"
-                  :value="passenger"
-                  :key="passenger"
-                >
-                  {{ passenger }}
-                  <div class="passenger">
-                    <div class="passenger-adults">
-                      <label for="passenger-adults">Adults</label>
-                      <div class="passenger-adults-input">
-                        <input
-                          type="number"
-                          id="passenger-adults"
-                          name="passenger-adults"
-                          min="1"
-                          max="9"
-                          v-model="passengerAdults"
-                        />
-                      </div>
-                    </div>
-                    <div class="passenger-children">
-                      <label for="passenger-children">Children</label>
-                      <div class="passenger-children-input">
-                        <input
-                          type="number"
-                          id="passenger-children"
-                          name="passenger-children"
-                          min="0"
-                          max="9"
-                          v-model="passengerChildren"
-                        />
-                      </div>
-                    </div>
-                    <div class="passenger-infants">
-                      <label for="passenger-infants">Infants</label>
-                      <div class="passenger-infants-input">
-                        <input
-                          type="number"
-                          id="passenger-infants"
-                          name="passenger-infants"
-                          min="0"
-                          max="9"
-                          v-model="passengerInfants"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <!-- add a section of each passenger to add or decrease number of passenger -->
-                  <button
-                    class="passenger-button"
-                    @click="decrementPassengers"
-                    :disabled="flightPassengers === 1"
-                  >
-                    -
-                  </button>
-                  <!-- input for number of passenger and it can display flightPassengers -->
-                  <input
-                    type="text"
-                    class="passenger-input"
-                    :value="flightPassengers"
-                  />
-                  <button
-                    class="passenger-button"
-                    @click="incrementPassengers"
-                    :disabled="flightPassengers === 9"
-                  >
-                    +
-                  </button>
-                </option>
-              </select>
-            </div>
-            <div class="flight-submit">
-              <button @click="searchFlight">Search</button>
-            </div>
-          </div>
-          <div class="flight down">
-            <!-- dropdown for roundtrip or oneway -->
-            <div class="flight-type left col">
-              <select id="flight-type" name="flight-type" v-model="flightType">
-                <option value="roundtrip">Roundtrip</option>
-                <option value="oneway">One Way</option>
-              </select>
-            </div>
-            <div class="flight-class left col">
-              <select
-                id="flight-class"
-                name="flight-class"
-                v-model="flightClass"
-              >
-                <option value="economy">Economy</option>
-                <option value="business">Business</option>
-                <option value="first">First</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <!-- when setbookingtype is hotel then show this div -->
-        <div v-if="bookingType === 'hotel'" class="template">
-          <div class="hotel">
-            <div class="hotel-location">
-              <label for="hotel-location">Location</label>
-              <input
-                type="text"
-                id="hotel-location"
-                name="hotel-location"
-                placeholder="Enter a city or airport"
-                v-model="hotelLocation"
-              />
-            </div>
-            <div class="hotel-checkin">
-              <label for="hotel-checkin">Check-in</label>
-              <input
-                type="date"
-                id="hotel-checkin"
-                name="hotel-checkin"
-                v-model="hotelCheckin"
-              />
-            </div>
-            <div class="hotel-checkout">
-              <label for="hotel-checkout">Check-out</label>
-              <input
-                type="date"
-                id="hotel-checkout"
-                name="hotel-checkout"
-                v-model="hotelCheckout"
-              />
-            </div>
-            <div class="hotel-guests">
-              <label for="hotel-guests">Guests</label>
-              <input
-                type="number"
-                id="hotel-guests"
-                name="hotel-guests"
-                min="1"
-                max="10"
-                v-model="hotelGuests"
-              />
-            </div>
-            <div class="hotel-submit">
-              <button @click="searchHotel">Search</button>
-            </div>
-          </div>
-        </div>
+  <v-card class="home">
+    <v-card class="template">
+      <h1 class="title">Home</h1>
+      <p>This is the home page. It's a good idea to have a home page.</p>
+      <div class="center_div">
+        <v-btn
+          color="accent"
+          large
+          x-large
+          v-for="tab in tabs"
+          :key="tab"
+          @click="selected = tab"
+          :class="['tab-btn', { active: selected === tab }]"
+        >
+          {{ tab }}
+        </v-btn>
       </div>
-    </div>
-  </div>
+      <component :is="selected" class="tab"></component>
+    </v-card>
+  </v-card>
 </template>
 
 <script>
-// import { MDBRadio, MDBBtnGroup } from "mdb-vue-ui-kit";
-import { ref } from "vue";
-const radio3 = ref("option1");
 export default {
-  name: "HomeView",
-  data() {
+  data: function () {
     return {
-      bookingType: "flight",
-      flightFrom: "",
-      flightTo: "",
-      flightDate: "",
-      flightReturnDate: "",
-      flightPassengers: 1,
-      flightClass: "economy",
-      flightType: "roundtrip",
-      hotelLocation: "",
-      hotelCheckin: "",
-      hotelCheckout: "",
-      hotelGuests: 1,
-      passengers: ["adult", "children", "infant"],
-      num_passengers: 1,
-      radio3,
-      book_type: {
-        1: "Flight",
-        2: "Hotel",
-        3: "Trips",
-      },
-      book_id: null,
+      tabs: ["Trips", "Flight", "Hotel"],
+      selected: "Trips",
     };
   },
-  methods: {
-    setBookingType(type) {
-      this.bookingType = type;
-    },
-    searchFlight() {
-      this.$router.push({
-        name: "flights",
-        params: {
-          from: this.flightFrom,
-          to: this.flightTo,
-          date: this.flightDate,
-          returnDate: this.flightReturnDate,
-          passengers: this.flightPassengers,
-          class: this.flightClass,
-          type: this.flightType,
-        },
-      });
-    },
-    searchHotel() {
-      this.$router.push({
-        name: "hotels",
-        params: {
-          location: this.hotelLocation,
-          checkin: this.hotelCheckin,
-          checkout: this.hotelCheckout,
-          guests: this.hotelGuests,
-        },
-      });
-    },
-    incrementPassengers() {
-      this.flightPassengers++;
-    },
-    decrementPassengers() {
-      this.flightPassengers--;
-    },
-  },
+  components: {},
 };
 </script>
 
-<style scoped>
-.booking {
+<style>
+.template {
   background: url("./../assets/background-place.jpg");
   background-size: cover;
   background-position: center;
@@ -309,99 +42,37 @@ export default {
   height: 60vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   color: white;
-}
-.flights {
-  display: flex;
-  align-items: center;
-  margin: 10px;
-  display: none;
-}
-.radios {
-  display: flex;
-  align-items: center;
-}
-.radios input {
-  margin: 0 10px;
-}
-.radios input:checked + .radio {
-  background-color: blue;
-}
-input[type="radio"] {
-  display: none;
-}
-/* input type radio that is not active set bgcolor to white */
-input[type="radio"]:checked:after {
-  background-color: white;
-}
-.booking-type {
-  display: flex;
-  align-items: center;
-  margin: 10px;
-}
-.booking-type input {
-  margin: 0 10px;
-}
-.flight {
-  display: flex;
-  align-items: center;
-  margin: 10px;
-}
-.flight input {
-  margin: 0 10px;
-}
-.flight-submit {
-  margin: 10px;
-  display: flex;
-  align-items: center;
-}
-.col {
-  display: flex;
-  flex-direction: column;
-  align-items: baseline;
-}
-.template {
-  display: flex;
   justify-content: center;
-  align-items: baseline;
-  height: 20vh;
-  background-color: blue;
-  opacity: 0.7;
-  flex-direction: column;
-  width: 1000px;
 }
-.left {
-  margin-left: 20px;
-}
-.passenger {
-  display: flex;
-  align-items: center;
-  margin: 10px;
-}
-.header_div {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.tab-btn {
+  margin-bottom: 1rem;
+  outline: none;
+  padding: 20px 90px;
   margin-right: 50px;
-  background-color: white;
-  width: 200px;
-  height: 40px;
-  color: blue;
+  display: flex;
+  text-align: center;
+  color: blue !important;
 }
-.header_div:hover {
+
+.active {
+  background-color: red;
+}
+
+.tab {
+  padding: 10px;
+  width: 1000px;
+  height: 150px;
   background-color: blue;
-  color: white;
-  cursor: pointer;
+  margin-top: -15px;
 }
-/* not active */
-.header_div:active {
-  background-color: white;
-  color: blue;
-}
-.header_div:active:hover {
-  background-color: blue;
-  color: white;
+.center_div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  margin-top: 30px;
 }
 </style>
