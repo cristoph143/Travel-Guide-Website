@@ -79,7 +79,7 @@ export default {
 .tab {
   padding: 10px;
   width: 1000px;
-  height: 150px;
+  height: 200px;
   background-color: blue;
   margin-top: -15px;
 }
