@@ -82,6 +82,9 @@ export default {
   height: 200px;
   background-color: blue;
   margin-top: -15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .center_div {
   display: flex;
