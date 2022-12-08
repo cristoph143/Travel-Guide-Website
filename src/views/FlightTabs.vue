@@ -7,94 +7,55 @@
           <label for="selectFlights">Select Flights</label>
           <div class="row">
             <!-- search autocomplete for flying from -->
-            <v-autocomplete
+            <v-text-field
               v-model="flyingFrom"
-              :items="airports"
               label="Flying From"
-              item-text="name"
-              item-value="code"
-              return-string="true"
-              auto-select-first
-              clearable
-              dense
-              rounded
-              class="wid"
-              @change="getAirports"
-            ></v-autocomplete>
-            <v-autocomplete
-              v-model="flyingTo"
+              placeholder="Flying From"
+              type="search"
+              class="col"
               :items="airports"
-              label="Flying To"
               item-text="name"
               item-value="code"
-              return-object
-              auto-select-first
+              autocomplete
               clearable
+              outlined
               dense
-              rounded
-              class="wid"
-              @change="getAirports"
-            ></v-autocomplete>
+            ></v-text-field>
+            <!-- search autocomplete for flying to -->
+            <v-text-field
+              v-model="flyingTo"
+              label="Flying To"
+              placeholder="Flying To"
+              type="search"
+              class="col"
+              :items="airports"
+              item-text="name"
+              item-value="code"
+              autocomplete
+              clearable
+              outlined
+              dense
+            ></v-text-field>
           </div>
         </div>
         <div class="col box">
           <!-- label for Select Travel Dates -->
           <label for="selectTravelDates">Select Travel Dates</label>
           <div class="row">
-            <!-- date picker for departure date -->
-            <v-menu
-              ref="menu"
-              v-model="menu"
-              :close-on-content-click="false"
-              transition="scale-transition"
-              offset-y
-              min-width="290px"
-            >
-              <template v-slot:activator="{ on }">
-                <v-text-field
-                  v-model="departureDate"
-                  label="Departure Date"
-                  readonly
-                  v-on="on"
-                  dense
-                  rounded
-                  class="wid"
-                ></v-text-field>
-              </template>
-              <v-date-picker
-                v-model="departureDate"
-                no-title
-                scrollable
-                @input="menu = false"
-              ></v-date-picker>
-            </v-menu>
-            <!-- date picker for return date -->
-            <v-menu
-              ref="menu"
-              v-model="menu"
-              :close-on-content-click="false"
-              transition="scale-transition"
-              offset-y
-              min-width="290px"
-            >
-              <template v-slot:activator="{ on }">
-                <v-text-field
-                  v-model="returnDate"
-                  label="Return Date"
-                  readonly
-                  v-on="on"
-                  dense
-                  rounded
-                  class="wid"
-                ></v-text-field>
-              </template>
-              <v-date-picker
-                v-model="returnDate"
-                no-title
-                scrollable
-                @input="menu = false"
-              ></v-date-picker>
-            </v-menu>
+            <v-text-field
+              v-model="departDate"
+              label="Depart Date"
+              type="date"
+              class="wid"
+            ></v-text-field>
+            <v-text-field
+              v-model="returnDate"
+              label="Return Date"
+              type="date"
+              class="wid"
+              @change="departureDate"
+              v-if="checkDepDate"
+            ></v-text-field>
           </div>
         </div>
         <div class="col boxs">
@@ -138,8 +99,6 @@
           v-model="classy"
           :items="classOptions"
           label="Class"
-          dense
-          rounded
           class="wid"
         ></v-select>
       </div>
@@ -153,7 +112,7 @@ export default {
     return {
       flyingFrom: null,
       flyingTo: null,
-      departureDate: null,
+      departureDate: " ",
       returnDate: null,
       departureDateMenu: false,
       returnDateMenu: false,
@@ -164,12 +123,36 @@ export default {
       classy: null,
       classOptions: ["Economy", "Business", "First Class"],
       airports: [],
+      checkDepDate: true,
+      departDate: null,
     };
   },
   methods: {
     hello() {
       // insert values to airports their name of place for airport
       this.airports.insert({ name: "name of place", code: "code of place" });
+    },
+    getAirports() {
+      // use axios to import from https://airport-info.p.rapidapi.com/airport
+      const axios = require("axios").default;
+      const options = {
+        method: "GET",
+        url: "airport-info.p.rapidapi.com/airport",
+        headers: {
+          "X-RapidAPI-Key":
+            "ab0af44cf9msh2a4230be3397f51p16692cjsn63dd3957cdc4",
+          "X-RapidAPI-Host": "airport-info.p.rapidapi.com",
+        },
+      };
+
+      axios
+        .request(options)
+        .then(function (response) {
+          console.log(response.data);
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
     },
   },
 };

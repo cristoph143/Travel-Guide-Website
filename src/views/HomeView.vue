@@ -1,97 +1,127 @@
 <template>
-  <v-card class="home">
-    <v-card class="template">
-      <h1 class="title">Home</h1>
-      <p>This is the home page. It's a good idea to have a home page.</p>
-      <div class="center_div">
-        <v-btn
-          color="accent"
-          large
-          x-large
-          v-for="tab in tabs"
-          :key="tab"
-          @click="selected = tab"
-          :class="['tab-btn', { active: tab.includes(selected) }]"
-        >
-          {{ tab }}
-        </v-btn>
-      </div>
-      <!-- display other components with selected -->
-      <div v-if="selected === 'Flight'" class="tab">
-        <FlightTabs />
-      </div>
-      <div v-if="selected === 'Hotel'" class="tab">
-        <HotelTabs />
-      </div>
-      <div v-if="selected === 'Trips'" class="tab">
-        <TripsTabs />
-      </div>
-    </v-card>
+  <v-card class="stores">
+    <v-carousel show-arrows="hover" cycle class="caro">
+      <!-- loop the v-carousel-item -->
+      <v-carousel-item
+        v-for="item in items"
+        :key="item"
+        :src="item.src"
+        :lazy-src="item.lazySrc"
+        :alt="item.alt"
+        :transition="item.transition"
+        cover
+      >
+        <div class="end">
+          <h1 class="title">Home</h1>
+          <p>This is the home page. It's a good idea to have a home page.</p>
+          <div class="pad-top">
+            <OpenTabs />
+          </div>
+        </div>
+      </v-carousel-item>
+    </v-carousel>
   </v-card>
 </template>
 
 <script>
-import FlightTabs from "../views/FlightTabs.vue";
-import HotelTabs from "../views/HotelTabs.vue";
-import TripsTabs from "../views/TripsTabs.vue";
+import OpenTabs from "../views/OpenTabs.vue";
+import { ref } from "vue";
 export default {
-  data: function () {
+  data: () => {
     return {
-      tabs: ["Trips", "Flight", "Hotel"],
-      selected: "Trips",
+      isOpen: ref(false),
+      items: [
+        {
+          src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg",
+          lazySrc: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg",
+          alt: "Squirrel",
+          transition: "fade-transition",
+        },
+        {
+          src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg",
+          lazySrc: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg",
+          alt: "Sky",
+          transition: "fade-transition",
+        },
+        {
+          src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg",
+          lazySrc: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg",
+          alt: "Bird",
+          transition: "fade-transition",
+        },
+        {
+          src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg",
+          lazySrc: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg",
+          alt: "Planet",
+          transition: "fade-transition",
+        },
+      ],
     };
   },
   components: {
-    FlightTabs,
-    HotelTabs,
-    TripsTabs,
+    OpenTabs,
   },
 };
 </script>
-
 <style>
-.template {
-  background: url("./../assets/background-place.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 60vh;
+/* design the show-arrows */
+.v-carousel__controls {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.pad-top {
+  padding-top: 100px;
+}
+.root {
+  position: relative;
+}
+.end {
+  right: 400px;
+  top: 300px;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 100px;
+}
+.highlight {
+  height: inherit;
+  width: 900px;
   display: flex;
   flex-direction: column;
   align-items: center;
   color: white;
   justify-content: center;
+  background-color: rgb(140, 0, 255);
 }
-.tab-btn {
-  margin-bottom: 1rem;
-  outline: none;
-  padding: 20px 90px;
-  margin-right: 50px;
+.highlight_tabs {
+  width: 400px;
+  height: inherit;
   display: flex;
-  text-align: center;
-  color: blue !important;
-}
-
-.active {
-  background-color: red;
-}
-
-.tab {
-  padding: 10px;
-  width: 1000px;
-  height: 200px;
-  background-color: blue;
-  margin-top: -15px;
-  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
   justify-content: center;
-  align-items: center;
+  background-color: aqua;
 }
-.center_div {
+.inside_stores {
   display: flex;
+  flex-direction: row;
   align-items: center;
-  justify-content: space-between;
-  background: none;
-  border: none;
-  margin-top: 30px;
+  justify-content: center;
+  color: white;
+  background-color: white;
+  height: 400px;
+  width: 1300px;
+}
+.stores {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  justify-content: center;
+  background-color: black;
+}
+.caro {
+  background-color: black;
 }
 </style>
